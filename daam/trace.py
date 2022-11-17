@@ -144,6 +144,7 @@ class DiffusionHeatMapHooker(AggregateHooker):
             all_merges.append(merge_list)
 
         maps = torch.stack([torch.stack(x, 0) for x in all_merges], dim=0)
+        # maps shape: (#time_step, #factors, tokens, 1, height, width)
         maps = maps.sum(0).cuda().sum(2).sum(0)
 
         return HeatMap(self.pipe.tokenizer, prompt, maps)
